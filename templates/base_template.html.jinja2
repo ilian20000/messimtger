@@ -9,41 +9,41 @@
 {#    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css' ) }}">#}
     {% block style %} {% endblock %} {# to add other stylsheets #}
 
-    {% block head %}
         <title> {{ title }} </title> {# default title #}
 {#        <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">#}
-    {% endblock %}
 
 </head>
 
 <body>
 
-<header>
-    <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top flex-fill">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url_for("home") }}">MessIMTger</a>
-            <!-- First button to toggle navbar -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link {% if active_page == "login" %}active{% endif %}" href="{{url_for("login")}}"> Connexion </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if active_page == "register" %}active{% endif %}" href="{{url_for("register")}}"> Créer un compte </a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link {% if active_page == "contact" %}active{% endif %}" href="{{url_for("contact")}}"> Contact </a>
-                    </li>
-                </ul>
-      </div>
-    </div>
-  </nav>
-</header>
+    {% block head %}
+        <header>
+            <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top flex-fill">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="{{ url_for("home") }}">MessIMTger</a>
+                    <!-- First button to toggle navbar -->
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navbar">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav me-auto mb-0">
+                            <li class="nav-item">
+                                <a class="nav-link {% if active_page == "login" %}active{% endif %}" href="{{url_for("login")}}"> Connexion </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if active_page == "register" %}active{% endif %}" href="{{url_for("register")}}"> Créer un compte </a>
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav ms-auto mb-0">
+                            <li class="nav-item">
+                                <a class="nav-link {% if active_page == "contact" %}active{% endif %}" href="{{url_for("contact")}}"> Contact </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+    {% endblock %}
 
 
 <main>

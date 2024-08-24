@@ -1,0 +1,12 @@
+{% extends 'base_template.html.jinja2' %}
+
+{% set title = "Mes Messages" %}
+{% set active_page = "dashboard" %}
+
+{# Removes the navbar #}
+{% block head %}
+{% endblock %}
+
+{% block content %}
+    Tema la taille de l'email {{ engineer.email }}
+{% endblock %}
