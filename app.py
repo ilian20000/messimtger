@@ -1,6 +1,8 @@
 import flask
 import os
 
+from flask import redirect, url_for
+
 import database.models
 from database.database import db, init_database
 from database.populate_database import populate_database
@@ -17,33 +19,26 @@ with app.test_request_context():
 
 @app.route("/")
 def index():
-    return "<p>Index Page<p>"
+    return redirect(url_for("home"))
 
 
+@app.route('/home')
+def home():
+    return flask.render_template("home.html.jinja2")
+
+@app.route('/contact')
+def contact():
+    return flask.render_template("contact.html.jinja2")
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/login')
 def login():
-    username = request.form['username']
-    password = request.form['password']
+    return flask.render_template("login.html.jinja2")
 
-    conn = sqlite3.connect('database.db')
-    c = conn.cursor()
-    c.execute('SELECT * FROM users WHERE username = ?', (username,))
-    user = c.fetchone()
-    conn.close()
+@app.route('/register')
+def register():
+    return flask.render_template("register.html.jinja2")
 
-    if user:
-        if check_password_hash(user[2], password):
-            session['username'] = username
-            flash('Connexion réussie!', 'success')
-            return redirect(url_for('dashboard'))
-        else:
-            flash('Mot de passe incorrect', 'danger')
-    else:
-        flash('Utilisateur non trouvé', 'danger')
-
-    return redirect(url_for('index'))
 
 @app.route("/view")
 def view_messages():

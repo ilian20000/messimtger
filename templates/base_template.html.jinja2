@@ -3,36 +3,62 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+{#    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css' ) }}">#}
+    {% block style %} {% endblock %} {# to add other stylsheets #}
+
     {% block head %}
-        <title>Page de template (Titre)</title>
+        <title> {{ title }} </title> {# default title #}
+{#        <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">#}
     {% endblock %}
+
 </head>
 
 <body>
-<nav>
-    <ul><li><a href="{{ url_for('index') }}">Home</a></li></ul>
-</nav>
+
+<header>
+    <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top flex-fill">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for("home") }}">MessIMTger</a>
+            <!-- First button to toggle navbar -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_page == "login" %}active{% endif %}" href="{{url_for("login")}}"> Connexion </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_page == "register" %}active{% endif %}" href="{{url_for("register")}}"> Créer un compte </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% if active_page == "contact" %}active{% endif %}" href="{{url_for("contact")}}"> Contact </a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
 
 <main>
-    <p>TODO : Virer le com du template</p>
-{#        {% for message in get_flashed_messages() %}#}
-{#            <div class="alert">{{ message }}</div>#}
-{#        {% endfor %}#}
     {% block content %}{% endblock %}
 </main>
 
 <footer>
     {% block footer %}
-        <small> &copy; 2018 <a href="http://greyli.com" title="Written by Grey Li">Grey Li</a> /
-            <a href="https://github.com/greyli/helloflask" title="Fork me on GitHub">GitHub</a> /
-            <a href="http://helloflask.com" title="A HelloFlask project">HelloFlask</a>
+        <small>
+            Rattrapage UE Web - IMT Atlantique 2024 | MessIMTger Webapp <a href="https://github.com/ilian20000/messimtger" title="View GitHub Repo">(Repo GitHub)</a>
         </small>
     {% endblock %}
 </footer>
 
 {% block scripts %}{% endblock %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
 </body>
 </html>
