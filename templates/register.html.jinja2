@@ -3,13 +3,17 @@
 {% set title = "Créer un compte MessIMTger" %}
 {% set active_page = "register" %}
 
+{% if register_error_msg is not defined %}
+{% set register_error_msg = "" %}
+{% endif %}
+
 {% block content %}
 
     <div class="d-flex justify-content-center">
         <div class="register-card mt-5 mb-5 mx-5">
             <div class="card">
                 <div class="card-header">
-                    Créer un compte
+                    <div class="text-center mt-2"> <h5> Créer un compte </h5> </div>
                 </div>
                 <div class="card-body">
                     <form action="{{ url_for("register_callback") }}" method="post">
@@ -25,12 +29,21 @@
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Mot de Passe</label>
+                            <div class="text-secondary">
+                                Au moins 6 caractères, doit contenir 1 lettre et 1 chiffre
+                            </div>
                             <input type="password" class="form-control mb-3" name="password"
                                    placeholder="Entrez votre mot de passe" required>
                             <input type="password" class="form-control" name="password_confirm"
                                    placeholder="Confirmez votre mot de passe" required>
+                            <div class="text-danger">
+                            {{ register_error_msg }}
+                            </div>
                         </div>
+                        <div class="d-flex justify-content-center">
                         <button type="submit" class="btn btn-primary">Créer un compte</button>
+                        </div>
+
                     </form>
                 </div>
                 <div class="card-footer text-center">

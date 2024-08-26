@@ -16,7 +16,7 @@
 
 <body>
 
-    {% block head %}
+    {% block header %}
         <header>
             <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top flex-fill">
                 <div class="container-fluid">
@@ -26,18 +26,28 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav me-auto mb-0">
-                            <li class="nav-item">
-                                <a class="nav-link {% if active_page == "login" %}active{% endif %}" href="{{url_for("login")}}"> Connexion </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {% if active_page == "register" %}active{% endif %}" href="{{url_for("register")}}"> Créer un compte </a>
-                            </li>
+                        <ul class="navbar-nav me-auto mb-0"> {# left side of navbar #}
+                            {% if active_page != "dashboard" %}
+                                <li class="nav-item">
+                                    <a class="nav-link {% if active_page == "login" %}active{% endif %}" href="{{url_for("login")}}"> Connexion </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {% if active_page == "register" %}active{% endif %}" href="{{url_for("register")}}"> Créer un compte </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {% if active_page == "contact" %}active{% endif %}" href="{{url_for("contact")}}"> Contact </a>
+                                </li>
+                            {% endif %}
                         </ul>
-                        <ul class="navbar-nav ms-auto mb-0">
-                            <li class="nav-item">
-                                <a class="nav-link {% if active_page == "contact" %}active{% endif %}" href="{{url_for("contact")}}"> Contact </a>
-                            </li>
+                        <ul class="navbar-nav ms-auto mb-0"> {# right side of navbar #}
+                            {% if active_page == "dashboard" %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#"> Connecté en tant que {{ session["username"] }} </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{url_for("logout_callback")}}"> Déconnexion </a>
+                                </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>

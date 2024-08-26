@@ -16,8 +16,6 @@ footer {
     width: 100%;
 }
 
-
-
 .login-card {
     max-width: 400px;
     width: 100%;
@@ -28,13 +26,31 @@ footer {
     width: 100%;
 }
 
-.login-card .card-header {
+.login-card .card-header .register-card {
     text-align: center;
     font-weight: bold;
 }
 
 .login-card .btn-primary {
     width: 100%;
+}
+
+.message-card {
+    max-width: 70%;
+}
+
+.message-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.message-right {
+    align-self: end;
+    text-align: right;
+}
+
+.message-left {
+    align-self: start;
 }
 
 .red {

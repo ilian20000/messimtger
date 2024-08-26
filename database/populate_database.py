@@ -1,15 +1,19 @@
 from database.database import db
-from database.models import Engineer
+from database.models import User
+# from database.models import Engineer
 
 
 def clear_database():
-    Engineer.query.delete()
-    print("CLEAR ?", db.session.query(Engineer).all())
+    User.query.delete()
+
+    print("Users", db.session.query(User).all())
 
 def populate_database():
     clear_database()
-    new_engie = Engineer(id=3310, username="iliaaan", email="myemailgmailcom", site="bullshitco")
+    print("Populating database")
 
-    db.session.add(new_engie)
+    new_user = User(username="iliaaan", email="ilian3310@gmail.com", password="motdepasse")
+    db.session.add(new_user)
     db.session.commit()
+    print("Users", db.session.query(User).all())
     return

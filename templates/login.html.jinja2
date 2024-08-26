@@ -3,26 +3,30 @@
 {% set title = "Connexion à MessIMTger" %}
 {% set active_page = "login" %}
 
-{% block style %}
-{% endblock %}
+{% if login_error_msg is not defined %}
+{% set login_error_msg = "" %}
+{% endif %}
 
 {% block content %}
     <div class="d-flex justify-content-center">
         <div class="login-card mt-5 mb-5 mx-5">
             <div class="card">
                 <div class="card-header">
-                    Connexion
+                    <div class="text-center mt-2"> <h5> Connexion </h5> </div>
                 </div>
                 <div class="card-body">
                     <form action="{{ url_for("login_callback") }}" method="post">
                         <div class="mb-3">
-                            <label for="email" class="form-label">Adresse Email</label>
-                            <input type="email" class="form-control" name="email" placeholder="Entrez votre email" required>
+                            <label for="text" class="form-label">Identifiant</label>
+                            <input type="text" class="form-control" name="identifier" placeholder="Entrez votre pseudo ou email" required>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Mot de Passe</label>
                             <input type="password" class="form-control" name="password"
                                    placeholder="Entrez votre mot de passe" required>
+                            <div class="text-danger">
+                            {{ login_error_msg }}
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Se connecter</button>
                     </form>
