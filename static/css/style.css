@@ -1,12 +1,24 @@
 
 main {
     display: flex;
-    /*min-width: 100%;*/
-    /*align-items: stretch;*/
-    /*justify-content: space-between;*/
+    min-width: 100%;
+    min-height: 100%;
+    align-items: stretch;
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+body {
+    display:flex;
     flex-direction: column;
-    /*flex-grow: 1;*/
     /*flex-shrink: 0;*/
+    flex-grow: 1;
+    justify-content: space-between;
+    align-items: stretch;
+
+    min-height: 100vh;
+
 }
 
 /* to add a small space before the footer */
@@ -51,8 +63,13 @@ footer {
 
 .message-left {
     align-self: start;
+    text-align: left;
 }
 
 .red {
     background-color: red;
+}
+
+.blue {
+    background-color: blue;
 }

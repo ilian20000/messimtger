@@ -1,7 +1,8 @@
-
-from database.models import User
-
 from database.database import db
+
+from database.models import User, Conversation, Message
+
+from datetime import datetime
 import re
 
 
@@ -100,3 +101,11 @@ def login_check(identifier, password, secret_key):
 
     return True
 
+def send_new_message(conversation_id, author_username, new_message_text):
+    new_message =   Message(message_text=new_message_text,
+                            message_date=datetime.now(),
+                            author_name=author_username,
+                            conversation_id=conversation_id)
+    db.session.add(new_message)
+    db.session.commit()
+    return

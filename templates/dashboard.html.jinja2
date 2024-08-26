@@ -3,13 +3,33 @@
 {% set title = "Mes Messages" %}
 {% set active_page = "dashboard" %}
 
+{% if active_conversation is not defined %}
+    {% set active_conversation_id = -1 %}
+{% else %}
+    {% set active_conversation_id = active_conversation.conversation_id %}
+        {% if active_conversation.conversation_name == "" %}
+            {% set conversation_display_name = "Conversation avec " + active_conversation.participants[0].username %}
+        {% else %}
+            {% set conversation_display_name = "Groupe " + active_conversation.conversation_name %}
+    {% endif %}
+{% endif %}
+
+{% if private_conversations is not defined %}
+    {% set private_conversations = [] %}
+{% endif %}
+
+{% if group_conversations is not defined %}
+    {% set group_conversations = [] %}
+{% endif %}
+
 {# Removes the navbar #}
 {#{% block head %}#}
 {#{% endblock %}#}
 
 {% block content %}
-    <div class="container-fluid">
+    <div class="container-fluid red">
         <div class="row">
+            {#            The side navbar with every available conversation : #}
             <nav class="col-md-3 bg-light sidebar">
                 <div class="sidebar-sticky">
 
@@ -20,13 +40,20 @@
                     </h6>
 
                     <ul class="nav flex-column">
-                        {% for i in range(5) %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                                Conversation {{i}}
-                            </a>
-                        </li>
+                        {% for conversation in private_conversations %}
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   href="{{ url_for("dashboard_select", conversation_id=conversation.conversation_id) }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                         stroke-linejoin="round" class="feather feather-shopping-cart">
+                                        <circle cx="9" cy="21" r="1"></circle>
+                                        <circle cx="20" cy="21" r="1"></circle>
+                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                    </svg>
+                                    {{ conversation.conversation_name }}
+                                </a>
+                            </li>
                         {% endfor %}
                     </ul>
 
@@ -37,38 +64,72 @@
                     </h6>
 
                     <ul class="nav flex-column">
-                        {% for i in range(3) %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                                Conversation {{i}}
-                            </a>
-                        </li>
+                        {% for conversation in group_conversations %}
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   href="{{ url_for("dashboard_select", conversation_id=conversation.conversation_id) }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                         stroke-linejoin="round" class="feather feather-shopping-cart">
+                                        <circle cx="9" cy="21" r="1"></circle>
+                                        <circle cx="20" cy="21" r="1"></circle>
+                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                    </svg>
+                                    {{ conversation.conversation_name }}
+                                </a>
+                            </li>
                         {% endfor %}
                     </ul>
 
-            </div>
-        </nav>
-        <div class="col-md-9 ml-sm-auto col-lg-9 pt-4 px-4">
-            <div class="mb-3">
-                <h2> Conversation X </h2>
-            </div>
-            <div class="message-panel">
-            {% for i in range(9) %}
-                <div class="card message-card message-left mb-2">
-                    <div class="card-header">
-                        <h6>Message {{ i }}</h6>
-                        <small> 10h12 </small>
-                    </div>
                 </div>
+            </nav>
 
-                <div class="card message-card message-right mb-2">
-                    <div class="card-body">
-                    Contenu message {{ i }}
+            {#        The message container : #}
+            <div class="col-md-9 ml-sm-auto col-lg-9 pt-4 px-4 blue">
+                {% if active_conversation is defined %}
+
+                <div class="container-fluid red">
+                <div class="col">
+                    <div class="row">
+                <div class="mb-3">
+                    <h2> {{ conversation_display_name }} </h2>
+                </div>
+                <div class="message-panel">
+                    {% for message in active_conversation.messages %}
+                        {% if message.author.username == session["username"] %}
+                            <div class="card message-card message-left mb-2">
+                                <div class="card-header">
+                                    <h6> {{ message.message_text }} </h6>
+                                    <small> le {{ message.message_date.date() }}
+                                        à {{ message.message_date.time().hour }}h{{ message.message_date.time().minute }} </small>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="card message-card message-right mb-2">
+                                <div class="card-body">
+                                    <h6> {{ message.message_text }} </h6>
+                                    <small> {{ message.author.username }} a écrit le {{ message.message_date.date() }}
+                                        à {{ message.message_date.time().hour }}h{{ message.message_date.time().minute }} </small>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                    {% endfor %}
+                </div>
+                </div>
+                        <div class="row">
+                        <form action="{{ url_for("send_message_callback", conversation_id=active_conversation_id) }}" method="post">
+                        <div class="mb-3">
+                            <label for="pseudo" class="form-label"> </label>
+                            <input type="text" class="form-control" name="new_message_text" placeholder="Envoyer un message à {{ conversation_display_name }}"
+                                   required>
+                        </div>
+                        </form>
+                        </div>
                     </div>
                 </div>
-            {% endfor %}
-            </div>
+                {% endif %}
+
             </div>
         </div>
     </div>
