@@ -35,3 +35,36 @@ The database containing all of the other informations (Users, Conversations, Mes
 
 The user interface uses as much bootstrap component as possible to keep it responsive and mobile-friendly.
 
+### Detailed Structure
+```
+MessimtgerServer
+│   app.py
+│   README.md
+│   session_manager.py
+│
+├───database
+│   │   database.db
+│   │   database.py
+│   │   models.py
+│   │   populate_database.py
+│   │
+│   └───image_database
+│           ExampleImageUpload.jpg
+│
+├───static
+│   │   logo1.png
+│   │   logoBig.png
+│   │
+│   └───css
+│           style.css
+│
+└───templates
+        base_template.html.jinja2
+        contact.html.jinja2
+        dashboard.html.jinja2
+        home.html.jinja2
+        index.html.jinja2
+        login.html.jinja2
+        navbar.html.jinja2
+        register.html.jinja2
+```
