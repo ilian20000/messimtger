@@ -33,6 +33,7 @@ class Message(db.Model):
     message_id = db.Column(db.Integer, primary_key=True)
     message_text = db.Column(db.String(64), unique=False, nullable=False)
     message_date = db.Column(db.DateTime, unique=False, nullable=False)
+    image_filename = db.Column(db.String(64), unique=False, nullable=True)
 
     author_name = db.Column(db.String(64), db.ForeignKey('user.username'), nullable=False)
     author = db.relationship('User', backref=db.backref('messages', lazy=True))

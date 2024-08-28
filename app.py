@@ -1,22 +1,21 @@
 import datetime
+import os
 
 import flask
 from flask import redirect, url_for
 from functools import wraps
+from werkzeug.utils import secure_filename
 
-from requests import session
-
-import database.models
 from database.database import db, init_database
-from database.models import Conversation
+from database.models import User, Conversation, Message
 from database.populate_database import populate_database
 
 import session_manager
 
-
 app = flask.Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///../database/database.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config['UPLOAD_FOLDER'] = os.path.join("database", "image_database")
 app.secret_key = 'verysecretkey'
 
 db.init_app(app)
@@ -59,7 +58,7 @@ def is_connected(f):
 @app.route("/dashboard/")
 @is_connected
 def dashboard():
-    group_conversations = Conversation.query.all()
+    group_conversations = Conversation.query.filter_by(is_private=False)
     private_conversations = Conversation.query.filter_by(is_private=True)
     return flask.render_template("dashboard.html.jinja2",
                                  private_conversations=private_conversations,
@@ -78,6 +77,7 @@ def dashboard_select(conversation_id):
                                      private_conversations=private_conversations,
                                      group_conversations=group_conversations,
                                      active_conversation=active_conversation)
+    print("No conversation selected, redirect to empty page");
     return redirect(url_for("dashboard"))
 
 
@@ -95,12 +95,15 @@ def login_callback():
         return flask.redirect(flask.url_for("dashboard"))
     return flask.render_template("login.html.jinja2", login_error_msg=login_error_msg)
 
-@app.route('/dashboard/', methods=['GET', 'POST'])
+# @app.route('/dashboard/')
+# @app.route('/dashboard/<int:conversation_id>/')
+@app.route('/*')
 def logout_callback():
     print('Session clearing...')
     flask.session.clear()
     print('Session cleared')
     return flask.redirect(flask.url_for("home"))
+
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register_callback():
@@ -123,13 +126,33 @@ def register_callback():
 @app.route('/dashboard/<int:conversation_id>/', methods=['GET', 'POST'])
 @is_connected
 def send_message_callback(conversation_id):
+    print("TAMERE")
     donnees = flask.request.form
     new_message_text = donnees.get("new_message_text")
     author_username = flask.session["username"]
+    image_upload = flask.request.files["image_input"]
+    if image_upload.filename == '':
+        flask.flash('No upload file')
+        session_manager.send_new_message(conversation_id, author_username, new_message_text)
+        return flask.redirect(flask.url_for("dashboard_select", conversation_id=conversation_id))
 
-    session_manager.send_new_message(conversation_id, author_username, new_message_text)
+    image_new_name = secure_filename(image_upload.filename)
+    image_upload.save(os.path.join(app.config['UPLOAD_FOLDER'], image_new_name))
+    flask.flash('File successfully uploaded ' + image_new_name)
+
+    session_manager.send_new_message(conversation_id, author_username, new_message_text, image_new_name)
 
     return flask.redirect(flask.url_for("dashboard_select", conversation_id=conversation_id))
+
+
+# @app.route('/dashboard/<int:conversation_id>/', methods=['GET', 'POST'])
+@app.route('/uploads/<path:image_filename>/', methods=['GET', 'POST'])
+@is_connected
+def display_image_link(image_filename):
+    print("TAMERE")
+    # image_path = os.path.join(app.config['UPLOAD_FOLDER'], image_filename)
+    print(str(image_filename))
+    return flask.send_from_directory(app.config['UPLOAD_FOLDER'], image_filename, as_attachment=True)
 
 
 if __name__ == "__main__":

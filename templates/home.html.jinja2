@@ -4,9 +4,24 @@
 {% set active_page = "home" %}
 
 {% block content %}
+    <div class="d-flex flex-column align-items-center w-100 mt-5 p-5">
+        <div class="text-center mb-5">
+            <h1> Bienvenue sur </h1>
+        </div>
 
-    <h1> TEMA LA TAILLE DU SIITE OMG </h1>
+        <img src="{{ url_for('static', filename='logoBig.png') }}" alt="Logo Messimtger"
+             style="width: 600px; height: 200px;">
+        <div class="text-center mt-3">
+            <h2>
+                La messagerie instantanée privée et sécurisée à IMT Atlantique
 
+            </h2>
+        </div>
+
+        <button class="login-button mt-5" onclick=location.href="{{ url_for("login") }}" type="button">
+            Se Connecter
+        </button>
+    </div>
 {% endblock %}
 
 

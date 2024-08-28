@@ -64,6 +64,13 @@ def populate_messages():
                        conversation_id=Conversation.query.filter_by(conversation_name="LaConvDeClasse1").first().conversation_id)
     db.session.add(message3)
 
+    message4 = Message(message_text="Ceci est une belle photo",
+                       message_date=datetime.now(),
+                       author_name=User.query.filter_by(username="iliaaan").first().username,
+                       conversation_id=Conversation.query.filter_by(conversation_name="LaConvDeClasse1").first().conversation_id,
+                       image_filename= "IMG_20211211_202927.jpg")
+    db.session.add(message4)
+
     print(Conversation.query.filter_by(is_private=True).where(Conversation.participants.any(User.username == "foo")).first())
     mp1 = Message(  message_text="salut @iliaaan, ça va ?",
                     message_date=datetime.now(),

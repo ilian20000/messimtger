@@ -11,6 +11,9 @@ EMAIL_MAX_LENGTH = 64
 PASSWORD_MAX_LENGTH = 64
 PASSWORD_MIN_LENGTH = 6
 
+UPLOAD_FOLDER = 'uploads/'  # Directory where uploaded images will be stored
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
 
 def register_check(username, email, password, password_confirm, secret_key):
     register_status = True
@@ -101,11 +104,15 @@ def login_check(identifier, password, secret_key):
 
     return True
 
-def send_new_message(conversation_id, author_username, new_message_text):
+def send_new_message(conversation_id, author_username, new_message_text, message_image_path=''):
     new_message =   Message(message_text=new_message_text,
                             message_date=datetime.now(),
                             author_name=author_username,
-                            conversation_id=conversation_id)
+                            conversation_id=conversation_id,
+                            message_image_path=message_image_path)
     db.session.add(new_message)
     db.session.commit()
     return
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
